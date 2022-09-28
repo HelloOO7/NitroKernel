@@ -1,0 +1,6 @@
+{
+    "cmake.configureArgs": [
+        "-DK_PLATFORM=ARMv5T"
+    ],
+    "cmake.configureOnOpen": true
+}
