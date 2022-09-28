@@ -194,7 +194,7 @@ namespace k {
 						return lib;
 					}
 					else {
-						lib = g_LastLibrary->m_PrevLibrary;
+						lib = lib->m_PrevLibrary;
 					}
 				}
 			}

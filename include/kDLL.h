@@ -1,7 +1,7 @@
 #ifndef __KDLL_H
 #define __KDLL_H
 
-#define LIBRARY_PATH_PREFIX "lib/lib"
+#define LIBRARY_PATH_PREFIX "lib/"
 #define LIBRARY_PATH_SUFFIX ".dll"
 
 #include "kTypes.h"

@@ -11,7 +11,8 @@ set(CMAKE_C_FLAGS "--specs=nosys.specs")
 set(CMAKE_CXX_FLAGS "--specs=nosys.specs")
 set(CMAKE_EXE_LINKER_FLAGS "-r -march=armv5t -mthumb" CACHE INTERNAL "")
 
-add_compile_options(-r -march=armv5t -mthumb)
+add_compile_options(-r -march=armv5t -mthumb -fno-rtti -fno-exceptions -fvisibility=hidden)
+
 add_compile_definitions(GFL)
 add_compile_definitions(EXL_DESMUME)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
