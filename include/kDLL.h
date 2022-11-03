@@ -5,6 +5,7 @@
 #define LIBRARY_PATH_SUFFIX ".dll"
 
 #include "kTypes.h"
+#include "k_Init.h"
 
 #include "Heap/exl_Allocator.h"
 
@@ -14,7 +15,15 @@ namespace k {
 	namespace dll {
 		namespace detail {
 			class LibraryState;
-		}
+		};
+
+		class _InitClass {
+		private:
+			static void _SysInit(rpm::mgr::ModuleManager* mgr);
+			static void _SysTerminate();
+
+		friend class ::k::KInitializer;
+		};
 
 		typedef detail::LibraryState* LibraryHandle;
 

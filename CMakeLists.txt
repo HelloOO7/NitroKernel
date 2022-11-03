@@ -9,9 +9,9 @@ set(CMAKE_SYSTEM_NAME               Generic)
 set(CMAKE_SYSTEM_PROCESSOR          arm)
 set(CMAKE_C_FLAGS "--specs=nosys.specs")
 set(CMAKE_CXX_FLAGS "--specs=nosys.specs")
-set(CMAKE_EXE_LINKER_FLAGS "-r -march=armv5t -mthumb" CACHE INTERNAL "")
+set(CMAKE_EXE_LINKER_FLAGS "-r -march=armv5t -mthumb -mthumb-interwork" CACHE INTERNAL "")
 
-add_compile_options(-r -march=armv5t -mthumb -fno-rtti -fno-exceptions -fvisibility=hidden)
+add_compile_options(-r -march=armv5t -mthumb -mthumb-interwork -fno-rtti -fno-exceptions -fvisibility=hidden)
 
 add_compile_definitions(GFL)
 add_compile_definitions(EXL_DESMUME)
@@ -41,11 +41,13 @@ file(GLOB K_SOURCES
 )
 
 add_executable(NitroKernel.elf ${K_SOURCES})
-target_link_libraries(NitroKernel.elf LibRPM.Include ExtLib.Include ExtLib.Heap ExtLib.ABI ExtLib.Base)
+target_link_libraries(NitroKernel.elf PRIVATE ExtLib.Include)
+target_link_libraries(NitroKernel.elf PUBLIC LibRPM.Include ExtLib.Heap ExtLib.ABI ExtLib.Base)
 include_directories(../swan include)
 
 add_library(NitroKernel.Include include/k_DllExport.h)
 set_target_properties(NitroKernel.Include PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(NitroKernel.Include PUBLIC LibRPM.Include)
 target_include_directories(NitroKernel.Include PUBLIC include)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

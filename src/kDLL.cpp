@@ -130,7 +130,7 @@ namespace k {
 		 * 
 		 * @param mgr System-global parent module manager.
 		 */
-		static void _SysInit(rpm::mgr::ModuleManager* mgr) {
+		void _InitClass::_SysInit(rpm::mgr::ModuleManager* mgr) {
 			if (g_ModuleMgr) {
 				_SysTerminate();
 			}
@@ -142,7 +142,7 @@ namespace k {
 		/**
 		 * @brief Unloads all child modules and terminates the LibrarySystem global state.
 		 */
-		static void _SysTerminate() {
+		void _InitClass::_SysTerminate() {
 			while (g_LastLibrary) {
 				detail::LibraryState* lastLib = g_LastLibrary;
 				lastLib->Unload(g_ModuleMgr);
@@ -155,18 +155,6 @@ namespace k {
 				delete g_Allocator;
 				g_ModuleMgr = nullptr;
 			}
-		}
-
-		extern "C" RPM_DLLAPI_DLLMAIN_DEFINE {
-			switch (reason) {
-				case rpm::DllMainReason::MODULE_LOAD:
-					k::dll::_SysInit(mgr);
-					break;
-				case rpm::DllMainReason::MODULE_UNLOAD:
-					k::dll::_SysTerminate();
-					break;
-			}
-			return rpm::DllMainReturnCode::OK;
 		}
 
 		static rpm::init::ModuleAllocation ReadLibrary(const char* path, rpm::mgr::ModuleManager* mgr);

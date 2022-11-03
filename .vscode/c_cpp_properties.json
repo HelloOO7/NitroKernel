@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../extlib",
-                "${workspaceFolder}/../libRPM/include"
+                "${workspaceFolder}/../libRPM/include",
+                "${workspaceFolder}/include",
+                "D:/_REWorkspace/pokescript_genv/codeinjection_new/extlib"
             ],
             "defines": [
                 "_DEBUG",

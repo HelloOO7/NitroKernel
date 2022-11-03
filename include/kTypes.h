@@ -22,14 +22,18 @@
  */
 #define NELEMS(x) ((sizeof(x)/sizeof(0[x])) / ((size_t)(!(sizeof(x) % sizeof(0[x])))))
 
+#define	CONTAINER_OF(x, s, m) ((s*)((const char*) (x) - offsetof(s, m)))
+
 /**
  * @brief Force-inlined function.
  */
 #ifndef INLINE
 #if defined(_MSC_VER)
 #define INLINE inline __forceinline
+#define NOINLINE __noinline
 #elif defined(__GNUC__)
 #define INLINE inline __attribute__((always_inline))
+#define NOINLINE __attribute__ ((noinline))
 #endif
 #endif
 

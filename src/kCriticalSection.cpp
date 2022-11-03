@@ -3,6 +3,7 @@
 
 #include "kTypes.h"
 #include "k_ARMCPU.h"
+#include "k_ARMAttributes.h"
 
 #include "kCriticalSection.h"
 
@@ -18,10 +19,10 @@ namespace k {
     }
 
     ARMFUNC
-    void CriticalSection::Leave(CriticalSection criticalSection) {
+    void CriticalSection::Leave() {
         int cpsr;
         asm volatile("MRS %0, CPSR" : "=r" (cpsr) : :);
-        asm volatile("MSR CPSR_c, %0" : : "r" (cpsr & ~arm::MASK_IRQ | criticalSection.m_IRQBackup) :);
+        asm volatile("MSR CPSR_c, %0" : : "r" (cpsr & ~arm::MASK_IRQ | m_IRQBackup) :);
     }
 }
 
