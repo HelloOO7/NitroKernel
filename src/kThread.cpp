@@ -215,7 +215,7 @@ namespace k {
     }
 
     Thread::~Thread() {
-        if (m_State != EXITED) {
+        if (m_State != EXITED && m_State != NEW) {
             Stop();
         }
     }
@@ -583,8 +583,10 @@ namespace k {
     }
 
     void Thread::Unlink() {
-        m_NextThread->m_PrevThread = m_PrevThread;
-        m_PrevThread->m_NextThread = m_NextThread;
+        if (m_NextThread != nullptr) { //otherwise thread was never linked in
+            m_NextThread->m_PrevThread = m_PrevThread;
+            m_PrevThread->m_NextThread = m_NextThread;
+        }
     }
 
     void Thread::AppendTo(Thread* prev) {

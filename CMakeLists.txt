@@ -14,7 +14,7 @@ set(CMAKE_EXE_LINKER_FLAGS "-r -march=armv5t -mthumb -mthumb-interwork" CACHE IN
 add_compile_options(-r -march=armv5t -mthumb -mthumb-interwork -fno-rtti -fno-exceptions -fvisibility=hidden)
 
 add_compile_definitions(GFL)
-add_compile_definitions(EXL_DESMUME)
+#add_compile_definitions(EXL_DESMUME)
 if (CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_compile_definitions(DEBUG)
 endif()

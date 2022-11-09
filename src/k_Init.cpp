@@ -17,7 +17,7 @@ namespace k {
             case rpm::MODULE_LOAD:
                 k::Interrupt::_InitClass::_Init();
                 k::dll::_InitClass::_SysInit(mgr);
-                k::Thread::_InitClass::_Init(3, 32768);
+                k::Thread::_InitClass::_Init(3, 65536);
                 break;
             case rpm::MODULE_UNLOAD:
                 k::dll::_InitClass::_SysTerminate();

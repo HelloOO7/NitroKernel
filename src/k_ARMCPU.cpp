@@ -9,7 +9,11 @@ namespace arm {
     ARMFUNC
     void* GetDTCMAddress() {
         void* dtcmAddress;
-        asm volatile ("MRC p15, 0, %0, c9, c1, 0" : "=r" (dtcmAddress) ::);
+        asm volatile (
+            "MRC p15, 0, %0, c9, c1, 0\n"
+            "LSR %0, #12\n"
+            "LSL %0, #12\n"
+            : "=r" (dtcmAddress) ::);
         return dtcmAddress;
     }
 
