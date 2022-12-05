@@ -6,8 +6,7 @@
 
 #include "kTypes.h"
 #include "k_Init.h"
-
-#include "Heap/exl_Allocator.h"
+#include "RPM_Api.h"
 
 #include "k_DllExport.h"
 
@@ -48,6 +47,14 @@ namespace k {
 		 * @param handle Handle of the shared library to be deleted.
 		 */
 		K_PUBLIC void ReleaseLibrary(LibraryHandle handle);
+		/**
+		 * @brief Finds an exported procedure inside a dynamically linked module.
+		 * 
+		 * @param handle Handle to the module to search within.
+		 * @param procName Name of the procedure to search for.
+		 * @return Pointer to the procedure (with the Thumb bit set), or nullptr if not found.
+		 */
+		K_PUBLIC void* GetProcAddress(LibraryHandle handle, const char* procName);
 	}
 }
 

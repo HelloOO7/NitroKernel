@@ -42,12 +42,12 @@ file(GLOB K_SOURCES
 
 add_executable(NitroKernel.elf ${K_SOURCES})
 target_link_libraries(NitroKernel.elf PRIVATE ExtLib.Include)
-target_link_libraries(NitroKernel.elf PUBLIC LibRPM.Include ExtLib.Heap ExtLib.ABI ExtLib.Base)
-include_directories(../swan include)
+target_link_libraries(NitroKernel.elf PUBLIC LibRPM.Include ExtLib.Heap ExtLib.IO ExtLib.ABI ExtLib.Base)
+include_directories(include)
 
 add_library(NitroKernel.Include include/k_DllExport.h)
 set_target_properties(NitroKernel.Include PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(NitroKernel.Include PUBLIC LibRPM.Include)
+target_link_libraries(NitroKernel.Include PUBLIC LibRPM.Include ExtLib.Include)
 target_include_directories(NitroKernel.Include PUBLIC include)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})

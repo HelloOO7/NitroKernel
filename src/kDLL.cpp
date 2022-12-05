@@ -3,16 +3,11 @@
 
 #define ODL_WORKMEM_SIZE 4096
 
-#ifdef GFL
-#include "nds/fs.h"
-#elif defined(_WIN32)
-#include <stdio.h>
-#endif
-
 #include "kTypes.h"
 
 #include "Heap/exl_Allocator.h"
 #include "Heap/exl_HeapArea.h"
+#include "IO/exl_FileStream.h"
 #include "Util/exl_StrEq.h"
 
 #include "RPM_Api.h"
@@ -92,6 +87,14 @@ namespace k {
 				 * @param mgr ModuleManager to use for unloading.
 				 */
 				void Unload(rpm::mgr::ModuleManager* mgr);
+
+				/**
+				 * @brief Finds an exported procedure inside the underlying module.
+				 * 
+				 * @param procName Name of the procedure to search for.
+				 * @return Pointer to the procedure (with the Thumb bit set), or nullptr if not found.
+				 */
+				void* GetProcAddress(rpm::mgr::ModuleManager* mgr, const char* procName);
 			};
 
 			LibraryState::LibraryState(const char* name, rpm::Module* module) {
@@ -120,6 +123,10 @@ namespace k {
 
 			void LibraryState::Unload(rpm::mgr::ModuleManager* mgr) {
 				mgr->UnloadModule(m_Module);
+			}
+
+			void* LibraryState::GetProcAddress(rpm::mgr::ModuleManager* mgr, const char* procName) {
+				return mgr->GetProcAddress(m_Module, procName);
 			}
 		}
 
@@ -258,22 +265,21 @@ namespace k {
 			}
 		}
 
+		void* GetProcAddress(LibraryHandle handle, const char* procName) {
+			if (handle) {
+				return ((detail::LibraryState*)handle)->GetProcAddress(g_ModuleMgr, procName);
+			}
+			return nullptr;
+		}
+
 		rpm::init::ModuleAllocation ReadLibrary(const char* path, rpm::mgr::ModuleManager* mgr) {
-			size_t size;
+			exl::io::FileStream stream = exl::io::FileStream(path);
 
-			#ifdef GFL
-			FSFile file;
-			romfs_fopen(&file, path);
-
-			size = romfs_fgetsize(&file);
-
-			#elif defined(_WIN32)
-			FILE* file = fopen(path, "rb");
-			fseek(file, 0, SEEK_END);
-			
-			size = ftell(file);
-
-			#endif
+			if (!stream.SeekEnd(0)) {
+				stream.Close();
+				return nullptr;
+			}
+			size_t size = stream.Tell();
 
 			if (size == 0) {
 				return nullptr;
@@ -281,19 +287,9 @@ namespace k {
 
 			rpm::init::ModuleAllocation alloc = mgr->AllocModule(size);
 
-			#ifdef GFL
-			romfs_fseek(&file, 0, SeekOrigin::IO_SEEK_SET);
-			romfs_fread(&file, alloc, size);
-			romfs_fclose(&file);
-
-			#elif defined(_WIN32)
-			fseek(file, 0, SEEK_SET);
-			fread(alloc, 1, size, file);
-			fclose(file);
-			
-			#else
-			#error Invalid platform!
-			#endif
+			stream.SeekSet(0);
+			stream.Read(alloc, 1, size);
+			stream.Close();
 
 			return alloc;
 		}
