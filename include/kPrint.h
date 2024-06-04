@@ -1,6 +1,7 @@
 #ifndef __KUTIL_PRINT_H
 #define __KUTIL_PRINT_H
 
+#include <cstdarg>
 #include "k_DllExport.h"
 
 namespace k {
